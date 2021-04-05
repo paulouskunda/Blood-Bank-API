@@ -2,7 +2,7 @@
 
 /**
 * @param $db_link: Connection link to the database
-* @param $_id:  identification code
+* @param $pupil_id: pupil identification code
 * @param $password
 * @return error/false/query: return boolean or string of the error 
 */
@@ -14,7 +14,7 @@ function addNewUser($db_link, $donor_array_details){
 	}else if(checkThePhoneNumber($db_link, $donor_array_details['phone_number'])){
 		return "phone_number_exists";
 	}else{
-		$insert = "INSERT INTO users_tbl (name, email, phone_number, physical_address, password, type_of_user, user_type, city, province)
+		$insert = "INSERT INTO users_tbl (name, email, phone_number, physical_address, password, type_of_user, blood_group, city, province)
 		 VALUES ('".$donor_array_details['name']."', 
 		 '".$donor_array_details['email']."', 
 		'".$donor_array_details['phone_number']."', 
@@ -54,12 +54,12 @@ function checkThePhoneNumber($db_link, $phone_number){
 }
 
 
-function addHospital($db_link,  $hospital_name, $hospital_city, $hospital_location, $hospital_address, $hospital_lat, $hospital_long){
+function addHospital($db_link, $hospital_city, $hospital_name, $hospital_location, $hospital_address, $hospital_lat, $hospital_long){
 
 	if(checkHospitalName($db_link, $hospital_name)){
 		return "hospital_name_exits";
 	}else{
-				$hospitalData = "INSERT INTO hospital_tbl (hosp_name, hosp_city, hosp_location, hosp_address, hosp_lat, hosp_long) VALUES ('$hospital_name','$hospital_city', '$hospital_location', '$hospital_address', '$hospital_lat', '$hospital_long')";
+				$hospitalData = "INSERT INTO hospital_tbl (hosp_city, hosp_name, hosp_location, hosp_address, hosp_lat, hosp_long) VALUES ('$hospital_city','$hospital_name', '$hospital_location', '$hospital_address', '$hospital_lat', '$hospital_long')";
 		if (mysqli_query($db_link, $hospitalData)) {
 			return "hospital_added";
 		}else{
@@ -77,7 +77,7 @@ function checkHospitalName($db_link, $hospital_name){
 		return false;
 }
 function existingHospitals($db_link, $city){
-	$check_name= "SELECT * FROM hospital_tbl WHERE hosp_city = '$city'";
+	$check_name= "SELECT * FROM hospital_tbl WHERE hosp_city = '$city' OR hosp_city LIKE '%$city%'";
 
 	if (mysqli_num_rows(mysqli_query($db_link, $check_name)) > 0)
 
@@ -173,8 +173,8 @@ function getAllist($db_link, $status, $requesting_id){
 	req.req_id, req.request_blood_group, req.requested_city, req.requested_hosp, req.request_date,
 	users.name, req.reasonForBlood, users.type_of_user
 	FROM users_tbl as users, request_tbl as req 
-	WHERE req.request_status = 'accepted' OR req.request_status = 'rejected' AND req.requesting_id = users.user_id
-	AND req.requesting_id  = '$requesting_id' GROUP BY req.request_status";
+	WHERE users.user_id = req.requester_id  AND req.request_status = 'accepted' OR req.request_status = 'rejected'
+		AND req.requesting_id  = '$requesting_id' GROUP BY req.request_status";
 	
 	$runMeUp = mysqli_query($db_link, $getPendingRequest);
 	if(mysqli_num_rows($runMeUp)>0){
@@ -188,8 +188,12 @@ function getAllist($db_link, $status, $requesting_id){
 		}
 }
 function getAllistDonor($db_link, $status, $requesting_id){
-	$getPendingRequest = "SELECT * FROM request_tbl WHERE  request_status = 'accepted' OR request_status = 'rejected'
-	AND requester_id = '$requesting_id'";
+	$getPendingRequest = "SELECT req.requesting_id, req.requester_id, req.request_status,
+	req.req_id, req.request_blood_group, req.requested_city, req.requested_hosp, req.request_date,
+	users.name, req.reasonForBlood, users.type_of_user
+	FROM users_tbl as users, request_tbl as req 
+	WHERE req.request_status = 'accepted' OR req.request_status = 'rejected' AND req.requesting_id = users.user_id
+	AND req.requester_id  = '$requesting_id' GROUP BY req.request_status";
 	
 	$runMeUp = mysqli_query($db_link, $getPendingRequest);
 	if(mysqli_num_rows($runMeUp)>0){
@@ -256,6 +260,7 @@ function getAllDonors($db_link, $city){
 	}
 }
 
+<<<<<<< HEAD
 function addDonor($db_link, $donor_name, $d_blood_group, $d_hospital, $reason, $donating_date, $city){
 
 	if (checkDonatingDay($db_link, $donating_date)) {
@@ -293,4 +298,63 @@ function donatingDay($db_link){
 }
 
 
+=======
+function addDonation($db_link, $passedDonationArray){
+	if(checkIfDateBooked($db_link, $passedDonationArray['donor_date'])){
+		return "no_two_dates";
+
+	}else{
+		$insertDonation = "INSERT INTO donate_blood (don_id_ref, donor_name, 
+		donor_blood_group, donor_hospital, donation_reason, donor_date, donor_city) 
+		VALUES ('".$passedDonationArray['don_id_ref']."',
+		'".$passedDonationArray['donor_name']."',
+		'".$passedDonationArray['donor_blood_group']."',
+		'".$passedDonationArray['donor_hospital']."',
+		'".$passedDonationArray['donation_reason']."',
+		'".$passedDonationArray['donor_date']."',
+		'".$passedDonationArray['donor_city']."')";
+
+		if(mysqli_query($db_link, $insertDonation)){
+			return "inserted";
+		}else{
+			echo mysqli_error($db_link);
+			return false;
+		}
+	}
+}
+
+function getAllGiveBlood($db_link, $don_id_ref){
+	$select_donations = "SELECT * FROM donate_blood WHERE don_id_ref = '$don_id_ref'";
+	$runMeUp = mysqli_query($db_link, $select_donations);
+	if(mysqli_fetch_assoc($runMeUp) > 0){
+		return $runMeUp;
+	}else if(mysqli_fetch_assoc($runMeUp) === 0){
+		return 'no_record';
+	}else{
+		echo mysqli_error($db_link);
+		return false;
+	}
+}
+
+function checkIfDateBooked($db_link, $dateBooked){
+	$select_Dates = "SELECT * FROM donate_blood WHERE donor_date = '$dateBooked'";
+	$runMeUp = mysqli_query($db_link, $select_Dates);
+	if(mysqli_num_rows($runMeUp) > 0){
+		return true;
+	}else{
+		return false;
+	}
+}
+
+function deleteGivenBlood($db_link, $don_id_ref){
+	$select_donations = "DELETE FROM donate_blood WHERE don_id_ref = '$don_id_ref'";
+	$runMeUp = mysqli_query($db_link, $select_donations);
+	if($runMeUp){
+		return 'deleted';
+	}else{
+		echo mysqli_error($con);
+		return false;
+	}
+}
+>>>>>>> e8e56463ccec0e43527e37e382648f6ff4c78e27
 ?>
