@@ -1,3 +1,39 @@
+<?php
+ini_set("display_errors", "1");
+error_reporting(E_ALL);
+require_once 'includes/conn.php';
+require_once 'functions.php';
+
+      if(isset($_POST['submit'])){
+	$name = mysqli_real_escape_string($db_link, $_POST['name']);
+	$d_blood_group = mysqli_real_escape_string($db_link, $_POST['d_blood_group']);
+	$d_hospital = mysqli_real_escape_string($db_link, $_POST['d_hospital']);
+	$reason_for_donating = mysqli_real_escape_string($db_link, $_POST['reason_for_donating']);
+	$donating_date = mysqli_real_escape_string($db_link, $_POST['donating_date']);
+	$d_city = mysqli_real_escape_string($db_link, $_POST['d_city']);
+	$donate_day = addDonor($db_link, $name, $d_blood_group, $d_hospital, $reason_for_donating, $donating_date, $d_city);
+
+	echo $donate_day;
+
+		if ($donate_day === ' you_already_booked') {
+			echo "<script> swal ( 'Warning',
+                'Already  booked in the System',
+                'warning'
+              )
+              </script>";
+		}else if ($donate_day === 'true') {
+			echo "<script> swal ( 'Success',
+                'you have booked your donating day Successfully ',
+                'success'
+              )
+              </script>";
+		}
+
+
+	}
+?>
+
+
 <!doctype html>
 <html class="no-js" lang="zxx">
     <head>
@@ -152,36 +188,35 @@
 					
 									<p>please fill in the form below</p>
 									<!-- icipatala form -->
-									<form class="form" method="post" action="requestblood.php">											
+									<form class="form" method="post" action="donate.php">											
 													<input type="text" name="name" placeholder="donor_name" required="required">
 												</div>
 											
-											<div>												
-													
-													<input type="text" name="blood_group" placeholder="blood_group" required="required">
+											<div>							
+													<input type="text" name="d_blood_group" placeholder="blood_group" required="required">
 												</div>
 												
 												<div>												
 											
-													<input type="text" name="dhospital" placeholder="donor hospital" required="required">
+													<input type="text" name="d_hospital" placeholder="donor hospital" required="required">
 												</div>
 												<div>												
 											
-													<input type="text" name="reasonFordonating" placeholder="reason for donating" required="required">
+													<input type="text" name="reason_for_donating" placeholder="reason for donating" required="required">
 												</div>
 												
 												<div>												
 													
-													<input type="date" name="date" placeholder="date" required="required">
+													<input type="date" name="donating_date" placeholder="date" required="required">
 												</div>
 												<div>												
 													
-													<input type="text" name="dcity" placeholder="donor city" required="required">
+													<input type="text" name="d_city" placeholder="donor city" required="required">
 												</div>
 												
 											<div class="col-12">
 												<div class="form-group button">	
-													<button type="submit" name="submit"class="btn primary"><i class="fa fa-send"></i>add</button>
+													<button type="submit" name="submit"class="btn primary"><i class="fa fa-send"></i>donate</button>
 												</div>
 											</div>
 										</div>

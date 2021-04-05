@@ -165,7 +165,17 @@ require_once 'includes/conn.php';
 						<div class="single-fun">
 							<i class="icofont icofont-home"></i>
 							<div class="content">
-								<span class="counter">3468</span>
+							<?php 
+							require_once 'includes/conn.php';
+
+							$sql ="SELECT hosp_id FROM hospital_tbl ORDER BY hosp_id";
+							$query_run=mysqli_query($db_link,$sql);
+							$row=mysqli_num_rows($query_run);
+						
+							 echo '<span class ="counter">'.$row.'</span>';
+							?>
+							
+								
 								<p>Hospital's</p>
 							</div>
 						</div>
@@ -176,7 +186,16 @@ require_once 'includes/conn.php';
 						<div class="single-fun">
 							<i class="icofont icofont-user-alt-3"></i>
 							<div class="content">
-								<span class="counter">557</span>
+							<?php 
+							require_once 'includes/conn.php';
+
+							$sql ="SELECT don_id FROM donate_blood ORDER BY don_id";
+							$query_run=mysqli_query($db_link,$sql);
+							$row=mysqli_num_rows($query_run);
+						
+							 echo '<span class ="counter">'.$row.'</span>';
+							?>
+		
 								<p>Donor's</p>
 							</div>
 						</div>
@@ -187,7 +206,15 @@ require_once 'includes/conn.php';
 						<div class="single-fun">
 							<i class="icofont-simple-smile"></i>
 							<div class="content">
-								<span class="counter">4379</span>
+							<?php 
+							require_once 'includes/conn.php';
+
+							$sql ="SELECT req_id FROM request_tbl ORDER BY req_id";
+							$query_run=mysqli_query($db_link,$sql);
+							$row=mysqli_num_rows($query_run);
+						
+							 echo '<span class ="counter">'.$row.'</span>';
+							?>
 								<p>Blood Request's</p>
 							</div>
 						</div>
@@ -198,7 +225,16 @@ require_once 'includes/conn.php';
 						<div class="single-fun">
 							<i class="icofont icofont-table"></i>
 							<div class="content">
-								<span class="counter">32</span>
+							<?php 
+							require_once 'includes/conn.php';
+
+							$sql ="SELECT user_id FROM users_tbl ORDER BY user_id";
+							$query_run=mysqli_query($db_link,$sql);
+							$row=mysqli_num_rows($query_run);
+						
+							 echo '<span class ="counter">'.$row.'</span>';
+							?>
+							
 								<p>member's</p>
 							</div>
 						</div>

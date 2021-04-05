@@ -256,4 +256,41 @@ function getAllDonors($db_link, $city){
 	}
 }
 
+function addDonor($db_link, $donor_name, $d_blood_group, $d_hospital, $reason, $donating_date, $city){
+
+	if (checkDonatingDay($db_link, $donating_date)) {
+		return " you_already_booked";
+	}else{
+		$donorData = "INSERT INTO donate_blood (donor_name,  donor_blood_group, donor_hospital, donation_reason, donor_date, donor_city) VALUES ('$donor_name', '$d_blood_group', '$d_hospital', '$reason', '$donating_date', '$city')";
+		if (mysqli_query($db_link, $donorData)) {
+			# code...
+			return true;
+		}else{
+			return mysqli_error($db_link);
+		}
+	}
+}
+function checkDonatingDay($db_link, $donating_date){
+	$select_date = "SELECT * FROM donate_blood WHERE donor_date = '$donating_date'";
+
+	if (mysqli_num_rows(mysqli_query($db_link, $select_date)) > 0)
+		return true;
+	else
+		return false;
+}
+
+
+
+
+function donatingDay($db_link){
+	$select_date = "SELECT * FROM donate_blood";
+
+	if (mysqli_num_rows(mysqli_query($db_link, $select_date)) > 0)
+
+		return mysqli_query($db_link, $select_date);
+	else
+		return mysqli_error($db_link);
+}
+
+
 ?>
