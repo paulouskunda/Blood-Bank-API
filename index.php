@@ -1,3 +1,6 @@
+<?php 
+	header('location: admin/login.php');
+?>
 <!doctype html>
 <html class="no-js" lang="zxx">
     <head>
@@ -204,67 +207,7 @@
 						</div>
 					</div>
 				</section>
-				<!-- End Single Slider -->
-				<!-- Start Single Slider -->
-				
-				<!-- Start End Slider -->
-				<!-- Start Single Slider -->
-				
-				<!-- End Single Slider -->
-			
-		<!--/ End Slider Area -->
-		
-		<!-- Start Schedule Area -->
-		
-		<!--/End Start schedule Area -->
 
-		<!-- Start Feautes -->
-	
-		<!--/ End Feautes -->
-		
-		<!-- Start Fun-facts -->
-		
-		
-		<!-- Start Why choose -->
-		
-		<!--/ End Why choose -->
-		
-		<!-- Start Call to action -->
-		
-		<!--/ End Call to action -->
-		
-		
-		<!--/ End portfolio -->
-	
-		
-		<!-- Start service -->
-		
-		
-		<!--/ End service -->
-		
-		<!-- Pricing Table -->
-		
-		<!--/ End Pricing Table -->
-		
-		
-		
-		<!-- Start Blog Area -->
-		
-		<!-- End Blog Area -->
-		
-		<!-- Start clients -->
-		
-		<!--/Ens clients -->
-		
-		<!-- Start Appointment -->
-		
-		<!-- End Appointment -->
-		
-		<!-- Start Newsletter Area -->
-		
-		<!-- /End Newsletter Area -->
-		
-		<!-- Footer Area -->
 		<footer id="footer" class="footer ">
 			<!-- Footer Top -->
 			<div class="footer-top">
